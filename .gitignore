@@ -1,0 +1,28 @@
+# Einstellungen von Idea IntelliJ
+*.iml
+.idea/
+.idea/**/*
+
+# Eclipse-Einstellungen
+.metadata
+.settings/
+.settings/**/*
+
+# Ergebnisse der Maven Ausführung nicht ins git
+target/
+target/**/*
+overlays/
+overlays/**/*
+
+# Log-Dateien
+*.log
+
+# Betriebssystem-Müll
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
