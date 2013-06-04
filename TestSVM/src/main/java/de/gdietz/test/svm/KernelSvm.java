@@ -1,6 +1,8 @@
 package de.gdietz.test.svm;
 
-import libsvm.*;
+import org.encog.mathutil.libsvm.svm_node;
+import org.encog.mathutil.libsvm.svm_parameter;
+import org.encog.mathutil.libsvm.svm_problem;
 
 import javax.swing.*;
 import java.awt.*;

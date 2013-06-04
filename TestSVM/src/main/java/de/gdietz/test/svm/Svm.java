@@ -1,8 +1,8 @@
 package de.gdietz.test.svm;
 
-import libsvm.svm_node;
-import libsvm.svm_parameter;
-import libsvm.svm_problem;
+import org.encog.mathutil.libsvm.svm_node;
+import org.encog.mathutil.libsvm.svm_parameter;
+import org.encog.mathutil.libsvm.svm_problem;
 
 public interface Svm<K extends KernelParameter, P extends SvmParameter> {
 

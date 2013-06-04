@@ -1,6 +1,7 @@
 package de.gdietz.test.svm;
 
-import libsvm.svm_model;
+
+import org.encog.mathutil.libsvm.svm_model;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,12 +1,10 @@
 package de.gdietz.test.svm;
-import libsvm.svm_model;
+
+import org.encog.mathutil.libsvm.svm_model;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Eduard
- * Date: 31.05.13
- * Time: 14:12
- * To change this template use File | Settings | File Templates.
  */
 public class SvmModelResult {
     svm_model model;
@@ -22,7 +20,6 @@ public class SvmModelResult {
         this.data = data;
         bias = model.rho[0];
         cs = model.sv_coef[0];
-        int[] sv_indices = model.sv_indices;
         svs = getSVs();
         ds = getDs();
         omegas = getOmegas();
