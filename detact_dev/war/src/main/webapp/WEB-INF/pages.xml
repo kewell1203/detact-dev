@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages 
+		xmlns="http://jboss.org/schema/seam/pages"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="
+		    http://jboss.org/schema/seam/pages
+			http://jboss.org/schema/seam/pages-2.3.xsd"
+		login-view-id="/public/login.xhtml"
+		no-conversation-view-id="/private/home.xhtml">
+
+	<!-- ********** Navigation: Öffentliche Seiten ********** -->
+
+    <page
+            view-id="/public/*"
+            login-required="false" >
+        <navigation>
+            <rule if-outcome="login">
+                <redirect view-id="/public/login.xhtml"/>
+            </rule>
+        </navigation>
+    </page>
+
+    <!-- ********** Navigation: Gesicherte Seiten ********** -->
+
+    <page
+			view-id="/private/*"
+			login-required="true">
+
+		<navigation>
+            <rule if-outcome="home">
+				<redirect view-id="/private/home.xhtml"/>
+			</rule>
+            <rule if-outcome="selectClient">
+                <redirect view-id="/private/selectClient.xhtml"/>
+            </rule>
+            <rule if-outcome="selectProcessType">
+                <redirect view-id="/private/selectProcessType.xhtml"/>
+            </rule>
+            <rule if-outcome="loadData">
+                <redirect view-id="/private/loadData.xhtml"/>
+            </rule>
+        </navigation>
+	</page>
+
+	<!-- ********** Exceptions ********** -->	
+
+    <exception class="org.jboss.seam.framework.EntityNotFoundException">
+        <redirect view-id="/private/home.xhtml">
+            <message severity="warn">Record not found</message>
+        </redirect>
+    </exception>
+    
+    <exception class="javax.persistence.EntityNotFoundException">
+        <redirect view-id="/private/home.xhtml">
+            <message severity="warn">Record not found</message>
+        </redirect>
+    </exception>
+    
+    <exception class="javax.persistence.EntityExistsException">
+        <redirect view-id="/private/home.xhtml">
+            <message severity="warn">Duplicate record</message>
+        </redirect>
+    </exception>
+
+    <exception class="javax.faces.application.ViewExpiredException">
+        <redirect view-id="/public/login.xhtml">
+            <message severity="info">#{messageHandler.getResourceBundleString('error.msg.sessionTimeout')}</message>
+        </redirect>
+    </exception>
+
+    <exception class="org.jboss.seam.ConcurrentRequestTimeoutException" log-level="trace">
+        <redirect view-id="/private/home.xhtml">
+            <message severity="warn">#{messageHandler.getResourceBundleString('error.msg.unknownError')}</message>
+        </redirect>
+    </exception>
+
+    <exception>
+        <redirect view-id="/private/home.xhtml">
+            <message severity="warn">#{messageHandler.getResourceBundleString('error.msg.unknownError')}</message>
+        </redirect>
+    </exception>
+
+    <exception class="javax.persistence.OptimisticLockException">
+        <redirect view-id="/private/home.xhtml">
+            <message severity="warn">Another user changed the same data, please try again</message>
+        </redirect>
+    </exception>
+
+    <!-- ********** Anmeldung und Sicherheit ********** -->
+
+    <exception class="org.jboss.seam.security.AuthorizationException">
+        <redirect view-id="/private/home.xhtml">
+            <message severity="error">#{messageHandler.getResourceBundleString('error.msg.accessDenied')}</message>
+        </redirect>
+    </exception>
+
+    <exception class="org.jboss.seam.security.NotLoggedInException">
+        <redirect view-id="/public/login.xhtml">
+            <message severity="info">#{messageHandler.getResourceBundleString('org.jboss.seam.NotLoggedIn')}</message>
+        </redirect>
+    </exception>
+
+</pages>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://java.sun.com/xml/ns/persistence"
+        xsi:schemaLocation="
+            http://java.sun.com/xml/ns/persistence
+            http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+        version="2.0">
+
+	<persistence-unit name="pu_${detact.id}"
+                      transaction-type="JTA">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>java:/${detact.dataSource}</jta-data-source>
+
+        <class>de.symate.detact.persistence.entities.types.CatalogEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ClientEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ProcessTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ProductionRelationTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.types.PropertyTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.types.PropertyTypeValueEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ResourceRelationTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ObjectTypeClassPropertyEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ObjectTypeClassEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ObjectTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.types.InformationRelationTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ConsumptionRelationTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ProjectInformationRelationTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.types.ProjectTypeEntity</class>
+
+        <class>de.symate.detact.persistence.entities.instances.ConsumptionRelationEntity</class>
+        <class>de.symate.detact.persistence.entities.instances.InformationRelationEntity</class>
+        <class>de.symate.detact.persistence.entities.instances.ObjectEntity</class>
+        <class>de.symate.detact.persistence.entities.instances.ProcessEntity</class>
+        <class>de.symate.detact.persistence.entities.instances.ProductionRelationEntity</class>
+        <class>de.symate.detact.persistence.entities.instances.PropertyValueEntity</class>
+        <class>de.symate.detact.persistence.entities.instances.ResourceRelationEntity</class>
+        <class>de.symate.detact.persistence.entities.instances.ProjectInformationRelationEntity</class>
+        <class>de.symate.detact.persistence.entities.instances.ProjectEntity</class>
+
+        <class>de.symate.detact.persistence.entities.inventory.ToolEntity</class>
+        <class>de.symate.detact.persistence.entities.inventory.ToolPropertyEntity</class>
+
+        <class>de.symate.detact.persistence.entities.auxiliaries.DataTypeEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.FileEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.FileContentEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.NetworkConnectionEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.PrivilegeEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.ReferenceUnitEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.RoleEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.SettingEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.UnitEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.UserEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.VersionDocumentEntity</class>
+        <class>de.symate.detact.persistence.entities.auxiliaries.WorkflowModelEntity</class>
+
+        <class>de.symate.detact.persistence.entities.ElementEntity</class>
+        <class>de.symate.detact.persistence.entities.VersionedElementEntity</class>
+
+        <class>de.symate.detact.persistence.views.instances.ProcessObjectRelationView</class>
+        <class>de.symate.detact.persistence.views.instances.ProcessObjectTypedRelationView</class>
+        <class>de.symate.detact.persistence.views.instances.ProcessDataView</class>
+
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        
+        <properties>
+        	<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+        	<property name="hibernate.hbm2ddl.auto" value="validate"/>
+        	<property name="hibernate.show_sql" value="false"/>
+        	<property name="hibernate.format_sql" value="true"/>
+
+            <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+
+
+<!--
+            <property
+                    name="transaction.factory_class"
+                    value="org.hibernate.transaction.JTATransactionFactory" />
+            <property
+                    name="transaction.flush_before_completion"
+                    value="true" />
+-->
+            <!--
+            <property
+                    name="cache.provider_class"
+                    value="org.hibernate.cache.HashtableCacheProvider" />
+            <property
+                    name="transaction.factory_class"
+                    value="org.hibernate.transaction.JDBCTransactionFactory" />
+-->
+<!--
+            <property
+                    name="org.hibernate.service.jta.platform.spi.JtaPlatform"
+                    value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
+-->
+
+<!--            <property
+                    name="hibernate.transaction.jta.platform"
+                    value="org.hibernate.service.jta.platform.spi.JtaPlatform"/>
+-->
+
+            <!--            <property name="hibernate.transaction.factory_class" value="org.hibernate.engine.transaction.internal.jta.CMTTransactionFactory" />
+            -->
+<!--
+            <property
+                    name="jboss.entity.manager.factory.jndi.name"
+                    value="java:jboss/EntityManagerFactory"/>
+-->
+        </properties>
+    </persistence-unit>
+
+</persistence>

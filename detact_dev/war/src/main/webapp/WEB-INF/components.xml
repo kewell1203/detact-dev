@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components
+        xmlns="http://jboss.org/schema/seam/components"
+        xmlns:core="http://jboss.org/schema/seam/core"
+        xmlns:persistence="http://jboss.org/schema/seam/persistence"
+        xmlns:security="http://jboss.org/schema/seam/security"
+        xmlns:web="http://jboss.org/schema/seam/web"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation=
+                "http://jboss.org/schema/seam/core http://jboss.org/schema/seam/core-2.3.xsd
+             http://jboss.org/schema/seam/persistence http://jboss.org/schema/seam/persistence-2.3.xsd
+             http://jboss.org/schema/seam/security http://jboss.org/schema/seam/security-2.3.xsd
+             http://jboss.org/schema/seam/web http://jboss.org/schema/seam/web-2.3.xsd
+             http://jboss.org/schema/seam/components http://jboss.org/schema/seam/components-2.3.xsd">
+
+
+<core:init
+            debug="true" />
+
+    <!-- Seam Komponenten -->
+
+    <component
+            class="org.jboss.seam.transaction.EjbSynchronizations"
+            jndi-name="java:app/jboss-seam-${version.seam}/EjbSynchronizations"/>
+
+    <component
+            class="org.jboss.seam.async.TimerServiceDispatcher"
+            jndi-name="java:app/jboss-seam-${version.seam}/TimerServiceDispatcher"/>
+
+    <!-- Eigene Komponenten -->
+
+    <component
+            class="de.symate.detact.analysis.data.ProcessDataLoaderImpl"
+            jndi-name="java:app/web-analysis-logic-${detact.version}/ProcessDataLoaderImpl" />
+
+    <component
+            class="de.symate.detact.analysis.r.RConnectorImpl"
+            jndi-name="java:app/web-analysis-logic-${detact.version}/RConnectorImpl" />
+
+    <!-- Conversation ID Einstellungen -->
+	<core:manager 
+			concurrent-request-timeout="500"
+			conversation-id-parameter="cid" 
+			conversation-timeout="120000"
+			parent-conversation-id-parameter="pid"
+            default-flush-mode="AUTO" />
+
+    <!-- Datenbankverbindung -->
+
+    <persistence:entity-manager-factory
+            name="entityManagerFactory"
+            persistence-unit-name="pu_${detact.id}" />
+
+    <persistence:managed-persistence-context
+            name="originalEntityManager"
+            auto-create="true"
+            entity-manager-factory="#{entityManagerFactory}" />
+
+    <!-- Unser MessageBundle verknüpfen -->
+	<core:resource-loader>
+        <core:bundle-names>
+            <value>messages</value>
+        </core:bundle-names>
+    </core:resource-loader>
+
+	<!-- Make sure this URL pattern is the same as that used by the Faces Servlet -->
+	<web:hot-deploy-filter 
+			url-pattern="*.jsf" />
+
+	<security:identity
+            authenticate-method="#{authenticator.authenticate}"
+			remember-me="true" />
+
+	<!-- anschliessend erfolgt nach erfolgreichem Login: -->
+	<event type="org.jboss.seam.security.loginSuccessful">
+		<!-- Session-Timeout in Sekunden -->
+		<action execute="#{currentSession.setMaxInactiveInterval(3600)}" />
+		<action execute="#{redirect.returnToCapturedView}" />
+	</event>
+
+	<!-- falls das Login fehlschlägt: -->
+	<event type="org.jboss.seam.security.notLoggedIn">
+		<action execute="#{redirect.captureCurrentView}" />
+	</event>
+	
+	<!-- *** Factories *** -->
+
+	<factory 
+			name="currentSession" 
+			scope="stateless"
+			value="#{facesContext.externalContext.request.session}" />
+		
+    <!-- Für Dateiupload -->
+    <web:multipart-filter
+            create-temp-files="false"
+            max-request-size="10000000"
+            url-pattern="*.jsf"
+            disabled="true"/>
+
+</components>

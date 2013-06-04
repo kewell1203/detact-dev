@@ -1,0 +1,50 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        template="/templates/publicTemplate.xhtml">
+    <ui:param name="pageName" value="login" />
+
+    <div class="grid_4 alpha">
+        <h2><h:outputText value="Login-DEV" /></h2>
+    </div>
+
+    <div class="grid_4">
+        <h:form
+                id="form"
+                styleClass="login">
+            <ul>
+                <li>
+                    <h:inputText
+                            id="userName"
+                            styleClass="withImage user"
+                            value="#{credentials.username}" />
+                </li>
+                <li>
+                    <h:inputSecret
+                            id="userPassword"
+                            styleClass="withImage password"
+                            value="#{credentials.password}"
+                            redisplay="false" />
+                </li>
+                <li class="buttonbar">
+                    <h:commandButton
+                            action="#{identity.login}"
+                            value="#{msg['login.loginButtonText']}"
+                            styleClass="button"/>
+                </li>
+            </ul>
+        </h:form>
+    </div>
+
+    <div class="grid_4 omega">
+        <p><h:outputText value="Das Login wird in der Entwicklerversion nicht geprüft" /></p>
+    </div>
+
+    <!-- Fokus setzen, TODO: später in alle Seiten setzen?! -->
+    <script type="text/javascript">
+        document.getElementById('form:userName').focus();
+        document.getElementById('form:userName').select();
+    </script>
+
+</ui:composition>

@@ -1,0 +1,80 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="/templates/privateTemplate.xhtml">
+
+	<ui:define name="title">
+    	Mandant wählen
+    </ui:define>
+
+    <rich:dataTable
+            width="95%"
+            id="Clientliste"
+            rows="10"
+            headerClass="datatable"
+            rowClasses="clickable"
+            value="#{clientsQuery.getResultList()}"
+            rendered="#{currentUser != null}"
+            var="client">
+        <rich:column
+                sortable="true"
+                sortBy="#{client.title}"
+                label="Titel"
+                id="col_1">
+            <f:facet name="header">
+                <h:outputText
+                        value="#{msg['selectProject.tableTitleProject']}"
+                        id="Titel" />
+            </f:facet>
+            <h:commandLink
+                    value="#{client.title}"
+                    id="selectlink"
+                    action="#{selectClientBean.selectClient(client)}" />
+            <rich:tooltip
+                    for="selectlink"
+                    value="#{msg['selectProject.tooltipSelectProject']}" />
+        </rich:column>
+        <rich:column
+                sortable="false"
+                label="Bearbeiten"
+                id="col_2"
+                width="40px">
+            <f:facet name="header">
+                <h:outputText
+                        value="Action"
+                        id="Bearbeiten" />
+            </f:facet>
+            <a4j:commandLink
+                    ajaxSingle="true"
+                    id="editlink"
+                    disabled="true"
+                    reRender="titleText,descriptionText">
+                <h:graphicImage value="/img/actions/file_edit.png" />
+            </a4j:commandLink>
+            <rich:tooltip
+                    for="editlink"
+                    value="#{msg['selectProject.tooltipEditProject']}" />
+            <a4j:commandLink
+                    ajaxSingle="true"
+                    id="deletelink"
+                    disabled="true">
+                <h:graphicImage value="/img/actions/file_delete.png" />
+            </a4j:commandLink>
+            <rich:tooltip
+                    for="deletelink"
+                    value="#{msg['selectProject.tooltipDeleteProject']}" />
+        </rich:column>
+        <f:facet name="footer">
+            <rich:dataScroller
+                    align="center"
+                    for="Clientliste"
+                    maxPages="20"
+                    id="sc1" />
+        </f:facet>
+    </rich:dataTable>
+</ui:composition>

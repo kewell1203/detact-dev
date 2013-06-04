@@ -1,0 +1,44 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:d="http://www.symate.de/detact"
+        template="/templates/privateTemplate.xhtml">
+
+    <ui:param name="avoidHomeButton" value="true" />
+
+    <ui:define name="title">
+        <h:outputText value="Seitentitel" />
+    </ui:define>
+
+    <ui:define name="subtitle">
+        <h:outputText value="Untertitel" />
+    </ui:define>
+
+    <ui:define name="toolbar">
+        <d:toolbarEntry><h:commandButton
+                action="home"
+                styleClass="buttonWithImage buttonAdd"
+                value="TestButton" /></d:toolbarEntry>
+    </ui:define>
+
+    <p><h:outputText value="Das ist die Hauptseite. Hier kann man eigene Links hinterlegen." /></p>
+    <br/>
+    <p><h:commandLink
+            value="Mandant wählen"
+            action="selectClient" /></p>
+    <p><h:commandLink
+            value="Prozesstyp wählen"
+            action="selectProcessType"
+            rendered="#{currentClient != null}"/></p>
+    <p><h:commandLink
+            value="Daten laden"
+            action="loadData"
+            rendered="#{currentClient != null and not empty processType}"/></p>
+    <br/>
+    <p><h:outputText value="aktueller Nutzer: #{currentUser.loginName}"/></p>
+    <p><h:outputText value="aktueller Mandant: #{currentClient.title}"/></p>
+    <p><h:outputText value="aktueller Prozesstyp: #{processType.title}"/></p>
+    <p><h:outputText value="aktuelle Daten: #{dataHolderDev.description}"/></p>
+
+</ui:composition>

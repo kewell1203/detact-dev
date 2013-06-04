@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.symate.detact</groupId>
+        <artifactId>dependencies</artifactId>
+        <version>1.1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>de.symate.detact</groupId>
+    <artifactId>web-dev</artifactId>
+    <name>detact.web-dev</name>
+
+    <packaging>ear</packaging>
+
+    <!-- ********** Abhängigkeiten ********** -->
+
+    <dependencies>
+
+        <!-- Modulabhängigkeiten -->
+
+        <dependency>
+            <groupId>de.symate.detact</groupId>
+            <artifactId>web-dev-gui</artifactId>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>de.symate.detact</groupId>
+            <artifactId>web-dev-logic</artifactId>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>de.symate.detact</groupId>
+            <artifactId>web-core-logic</artifactId>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>de.symate.detact</groupId>
+            <artifactId>web-analysis-logic</artifactId>
+            <type>ejb</type>
+        </dependency>
+
+        <!-- Seam -->
+
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam</artifactId>
+            <type>ejb</type>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ********** Build-Konfiguration ********** -->
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <finalName>${detact.id}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-ear-plugin</artifactId>
+                <configuration>
+                    <defaultJavaBundleDir>lib/</defaultJavaBundleDir>
+
+                    <!-- Da wir die detact .jars in das ejb jar packen, lassen wir sie hier raus -->
+                    <packagingExcludes>**/persistence*.jar,**/analysis*.jar,**/connect*.jar</packagingExcludes>
+
+                    <version>6</version>
+                    <filtering>true</filtering>
+
+                    <modules>
+
+                        <!-- War -->
+
+                        <webModule>
+                            <groupId>de.symate.detact</groupId>
+                            <artifactId>web-dev-gui</artifactId>
+                            <contextRoot>${detact.id}</contextRoot>
+                            <bundleFileName>${detact.id}-web.war</bundleFileName>
+                        </webModule>
+
+                        <!-- EJBs -->
+
+                        <ejbModule>
+                            <groupId>de.symate.detact</groupId>
+                            <artifactId>web-core-logic</artifactId>
+                            <bundleFileName>${detact.id}-core-ejb.jar</bundleFileName>
+                        </ejbModule>
+
+                        <ejbModule>
+                            <groupId>de.symate.detact</groupId>
+                            <artifactId>web-dev-logic</artifactId>
+                            <bundleFileName>${detact.id}-dev-ejb.jar</bundleFileName>
+                        </ejbModule>
+
+                        <!-- Seam muss auch rein -->
+
+                        <ejbModule>
+                            <groupId>org.jboss.seam</groupId>
+                            <artifactId>jboss-seam</artifactId>
+                        </ejbModule>
+
+                    </modules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>${basedir}/target</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

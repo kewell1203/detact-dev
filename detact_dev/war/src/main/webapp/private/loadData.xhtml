@@ -1,0 +1,70 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:a4j="http://richfaces.org/a4j"
+        xmlns:rich="http://richfaces.org/rich"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:s="http://jboss.org/schema/seam/taglib"
+        template="/templates/privateTemplate.xhtml">
+
+    <ui:define name="title">
+        Lade Daten...
+    </ui:define>
+
+    <a4j:jsFunction
+            name="jsLoadData"
+            action="#{loadDataDevBean.actionLoadData}"
+            render="loadProgress">
+    </a4j:jsFunction>
+
+    <a4j:jsFunction
+            name="jsAnalysis"
+            action="#{loadDataDevBean.actionAnalysis}">
+    </a4j:jsFunction>
+
+    <h:panelGroup id="loadProgressPanel">
+        <rich:progressBar
+                id="loadProgress"
+                mode="ajax"
+                enabled="#{loadDataDevBean.running}"
+                interval="1000"
+                value="#{loadDataDevBean.percentLoaded}"
+                minValue="0"
+                maxValue="100"
+                onfinish="jsAnalysis()">
+            <f:facet name="initial">
+                <!-- Sollte eigentlich nicht erscheinen, da Ladeprozess automatisch angestoßen werden sollte. -->
+                <a4j:commandLink
+                        value="#{msg['analysis.loadData.loadData']}"
+                        action="#{loadDataDevBean.actionLoadData}"
+                        render="loadProgress">
+                    <a4j:attachQueue name="asyncQueue"/>
+                </a4j:commandLink>
+            </f:facet>
+            <f:facet name="finish">
+                <!-- Sollte (wenn überhaupt) nur kurz erscheinen, da automatisch weitergeleitet werden sollte. -->
+                <h:outputText value="#{msg['analysis.loadData.finished']} "/><br/><br/>
+                <a4j:commandLink
+                        value="#{msg['analysis.loadData.forward']}"
+                        action="#{loadDataDevBean.actionAnalysis}">
+                </a4j:commandLink>
+            </f:facet>
+            <h:panelGroup>
+                <h:outputText
+                        value="#{interpolator.interpolate(msg['analysis.loadData.progressPercent'], loadDataDevBean.percentLoaded, 100)}"
+                        rendered="#{loadDataDevBean.processing}"/>
+                <h:outputText
+                        value="#{msg['analysis.loadData.initialize']}"
+                        rendered="#{not loadDataDevBean.processing}"/>
+            </h:panelGroup>
+        </rich:progressBar>
+    </h:panelGroup>
+
+    <h:outputScript>
+        jQuery(document).ready(function() {
+            jsLoadData();
+        });
+    </h:outputScript>
+
+</ui:composition>

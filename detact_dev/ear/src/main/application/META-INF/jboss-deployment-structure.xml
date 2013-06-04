@@ -1,0 +1,19 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.0">
+    <deployment>
+        <dependencies>
+            <module name="org.apache.log4j" export="true"/>
+            <module name="org.dom4j" export="true"/>
+            <module name="org.apache.commons.logging" export="true"/>
+            <module name="org.apache.commons.collections" export="true"/>
+            <module name="org.hibernate" slot="main" export="true"/>
+            <module name="javax.faces.api" slot="main" export="true"/>
+            <module name="com.sun.jsf-impl" slot="main" export="true"/>
+        </dependencies>
+    </deployment>
+    <sub-deployment name="${detact.id}-web.war">
+        <dependencies>
+            <module name="javax.faces.api" slot="main"/>
+            <module name="com.sun.jsf-impl" slot="main"/>
+        </dependencies>
+    </sub-deployment>
+ </jboss-deployment-structure>
