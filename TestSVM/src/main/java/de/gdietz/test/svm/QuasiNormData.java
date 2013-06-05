@@ -1,19 +1,16 @@
 package de.gdietz.test.svm;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.symate.detact.analysis.data.DataColumnType;
 
-public class QuasiNormData implements Data {
+public class QuasiNormData extends FakeData {
+
+    public static final DataColumnType xType = new DataColumnTypeOfflineImpl("x");
+    public static final DataColumnType yType = new DataColumnTypeOfflineImpl("y");
+    public static final DataColumnType zType = new DataColumnTypeOfflineImpl("z");
 
     private static final int ITER = 100;
     private static final double ONE_TWELFTH = 1.0 / 12;
     private static final double SIGMA = Math.sqrt(ONE_TWELFTH / ITER);
-
-    private ColumnType resultType;
-
-    private List<ColumnType> independentTypes;
-
-    private List<Column> data;
 
     public static double quasiNormRandom(double mu, double sigma) {
         double x = 0;
@@ -25,55 +22,26 @@ public class QuasiNormData implements Data {
         return mu + x * sigma / SIGMA;
     }
 
-    public QuasiNormData(double muX0, double muY0, double sigma0, int count0,
+    public QuasiNormData(DataColumnType xType, DataColumnType yType,
+                         double muX0, double muY0, double sigma0, int count0,
                          double muX1, double muY1, double sigma1, int count1) {
-        resultType = new ColumnType("z");
-        ColumnType independentXType = new ColumnType("x");
-        ColumnType independentYType = new ColumnType("y");
-
-        independentTypes = new ArrayList<ColumnType>();
-        independentTypes.add(independentXType);
-        independentTypes.add(independentYType);
-
-        Column result = new Column(resultType);
-        Column independentX = new Column(independentXType);
-        Column independentY = new Column(independentYType);
-
-        data = new ArrayList<Column>();
-        data.add(independentX);
-        data.add(independentY);
-        data.add(result);
+        super(zType, xType, yType);
 
         for (int i = 0; i < count0; i++) {
             double x = quasiNormRandom(muX0, sigma0);
             double y = quasiNormRandom(muY0, sigma0);
-
-            independentX.add(x);
-            independentY.add(y);
-            result.add(-1);
+            add(-1, x, y);
         }
-
         for (int i = 0; i < count1; i++) {
             double x = quasiNormRandom(muX1, sigma1);
             double y = quasiNormRandom(muY1, sigma1);
-
-            independentX.add(x);
-            independentY.add(y);
-            result.add(1);
+            add(1, x, y);
         }
     }
 
-    public List<Column> getData() {
-        return data;
+    public QuasiNormData(double muX0, double muY0, double sigma0, int count0,
+                         double muX1, double muY1, double sigma1, int count1) {
+        this(xType, yType, muX0, muY0, sigma0, count0, muX1, muY1, sigma1, count1);
     }
-
-    public ColumnType getResultType() {
-        return resultType;
-    }
-
-    public List<ColumnType> getIndependentTypes() {
-        return independentTypes;
-    }
-
 
 }

@@ -1,6 +1,8 @@
 package de.gdietz.test.svm;
 
-import org.encog.mathutil.libsvm.svm_model;
+import de.symate.detact.analysis.data.DataHandler;
+import de.symate.detact.analysis.data.DataValue;
+import libsvm.svm_model;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,15 +35,19 @@ public class SvmModelResult {
         return bias;
     }
 
+    public int[] getSVindices() {
+        return model.sv_indices;
+    }
+
     public double[][] getSVs() {
         int n = model.l;
-        Value[][] values = data.independentValues();
+        DataValue[][] values = data.independentValues();
         svs = new double[n][values[0].length];
-        int[] sv_indices = model.sv_indices;
+        int[] sv_indices = getSVindices();
         for(int i = 0; i < model.l; i++){
             int l = sv_indices[i];
             for(int j = 0; j < values[0].length; j++){
-                svs[i][j] = values[l-1][j].getValue();
+                svs[i][j] = values[l-1][j].getDouble();
             }
         }
         return svs;

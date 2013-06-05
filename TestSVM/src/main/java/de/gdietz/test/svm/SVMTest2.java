@@ -1,20 +1,22 @@
 package de.gdietz.test.svm;
 
-import org.encog.mathutil.libsvm.svm;
-import org.encog.mathutil.libsvm.svm_model;
-import org.encog.mathutil.libsvm.svm_parameter;
-import org.encog.mathutil.libsvm.svm_problem;
+import de.symate.detact.analysis.data.DataColumnType;
+import de.symate.detact.analysis.data.DataHandler;
+import de.symate.detact.analysis.data.DataValue;
+import de.symate.detact.analysis.data.convert.DataScaled;
+import de.symate.detact.analysis.svm.CostParameter;
+import de.symate.detact.analysis.svm.KernelSvm;
+import libsvm.svm;
+import libsvm.svm_model;
+import libsvm.svm_parameter;
+import libsvm.svm_problem;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Created with IntelliJ IDEA.
  * User: Eduard
- * Date: 31.05.13
- * Time: 12:54
- * To change this template use File | Settings | File Templates.
  */
 public class SVMTest2 extends JPanel{
     private static final Color COLOR_POINT0 = new Color(225,140,0);
@@ -35,7 +37,7 @@ public class SVMTest2 extends JPanel{
     }
 
 
-    public void drawSVM(int width, int height, svm_model model, DataHandler data, ColumnType xType, ColumnType yType,
+    public void drawSVM(int width, int height, svm_model model, DataHandler data, DataColumnType xType, DataColumnType yType,
                                 RatterKernelParameter k, CostParameter p) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         double[] xMinMax = data.minMax(xType);
@@ -73,16 +75,16 @@ public class SVMTest2 extends JPanel{
                 g.drawLine(px, py+1, px, height);
             }
         }
-        Value[][] ivs = data.independentValues();
+        DataValue[][] ivs = data.independentValues();
 
 
         for(int i = 0; i < ivs.length; i++) {
-            double x = ivs[i][1].getValue();
+            double x = ivs[i][1].getDouble();
             int px = (int) ((x - xMin) / (xMax - xMin) * width);
-            double y = ivs[i][0].getValue();
+            double y = ivs[i][0].getDouble();
             int py = (int) ((yMax - y) / (yMax - yMin) * height);
 
-            if(data.getResult().get(i) < 0){
+            if(data.getResult().getDouble(i) < 0){
                 g.setColor(COLOR_POINT0);
                 g.fillRect(px-2, py-2, 5, 5);
             } else {
@@ -113,7 +115,7 @@ public class SVMTest2 extends JPanel{
         svm_model model = svm.svm_train(prob, param);
         SvmModelResult smr = new SvmModelResult(model,data);
         double r = svm2.kernel.getDecision(k,model, data,new double[] {0.4});
-        svm2.drawSVM(600, 480, model, data, new ColumnType("omega"), new ColumnType("d"), k, p);
+        svm2.drawSVM(600, 480, model, data, new DataColumnTypeOfflineImpl("omega"), new DataColumnTypeOfflineImpl("d"), k, p);
         JFrame frame = new JFrame("SVMTest2");
         frame.add(svm2);
         svm2.setPreferredSize(new Dimension(600, 480));

@@ -1,9 +1,13 @@
 package de.gdietz.test.svm;
 
-import org.encog.mathutil.libsvm.svm;
-import org.encog.mathutil.libsvm.svm_model;
-import org.encog.mathutil.libsvm.svm_parameter;
-import org.encog.mathutil.libsvm.svm_problem;
+import de.symate.detact.analysis.data.*;
+import de.symate.detact.analysis.svm.KernelParameter;
+import de.symate.detact.analysis.svm.Svm;
+import de.symate.detact.analysis.svm.SvmParameter;
+import libsvm.svm;
+import libsvm.svm_model;
+import libsvm.svm_parameter;
+import libsvm.svm_problem;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -47,13 +51,13 @@ public class SvmHandler<S extends Svm<K, P>, K extends KernelParameter, P extend
         return correct;
     }
 
-    public BufferedImage createImage(int width, int height, K k, P p, ColumnType xType, ColumnType yType, Value... otherValues) {
+    public BufferedImage createImage(int width, int height, K k, P p, DataColumnType xType, DataColumnType yType, DataValue... otherValues) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         log.info("Creating SVM problem and model.");
 
         int psize = otherValues.length + 2;
-        Value[] values = new Value[psize];
+        DataValue[] values = new DataValue[psize];
         for (int j = 0; j < otherValues.length; j++)
             values[j + 2] = otherValues[j];
 
@@ -78,11 +82,11 @@ public class SvmHandler<S extends Svm<K, P>, K extends KernelParameter, P extend
 
         for (int py = 0; py < height; py++) {
             double y = yMax + (yMin - yMax) * py / (height - 1);
-            values[1] = new Value(yType, y);
+            values[1] = new DataValueImpl(yType, y);
 
             for (int px = 0; px < width; px++) {
                 double x = xMin + (xMax - xMin) * px / (width - 1);
-                values[0] = new Value(xType, x);
+                values[0] = new DataValueImpl(xType, x);
 
                 double z = svm.svm_predict(model, s.createNode(k, values));
                 drawBack(image, px, py, z >= 0.0);
@@ -91,9 +95,9 @@ public class SvmHandler<S extends Svm<K, P>, K extends KernelParameter, P extend
 
         log.info("Drawing data points.");
 
-        Column zColumn = data.getResult();
-        Column xColumn = data.get(xType);
-        Column yColumn = data.get(yType);
+        DataColumn zColumn = data.getResult();
+        DataColumn xColumn = data.get(xType);
+        DataColumn yColumn = data.get(yType);
 
         Graphics2D graphics = image.createGraphics();
 
@@ -102,9 +106,9 @@ public class SvmHandler<S extends Svm<K, P>, K extends KernelParameter, P extend
 
         int size = data.size();
         for (int i = 0; i < size; i++) {
-            double z = zColumn.get(i);
-            double x = xColumn.get(i);
-            double y = yColumn.get(i);
+            double z = zColumn.getDouble(i);
+            double x = xColumn.getDouble(i);
+            double y = yColumn.getDouble(i);
 
             int px = (int) ((x - xMin) / (xMax - xMin) * (width - 1) + .5);
             int py = (int) ((y - yMax) / (yMin - yMax) * (height - 1) + .5);

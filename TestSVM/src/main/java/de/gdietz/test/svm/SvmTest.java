@@ -1,5 +1,12 @@
 package de.gdietz.test.svm;
 
+import de.symate.detact.analysis.data.Data;
+import de.symate.detact.analysis.data.DataColumnType;
+import de.symate.detact.analysis.data.DataHandler;
+import de.symate.detact.analysis.data.convert.DataScaled;
+import de.symate.detact.analysis.svm.CostParameter;
+import de.symate.detact.analysis.svm.KernelSvm;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -19,8 +26,8 @@ public class SvmTest {
     private KernelSvm<RatterKernelParameter> s;
     private SvmHandler<KernelSvm<RatterKernelParameter>, RatterKernelParameter, CostParameter> svmHandler;
 
-    private ColumnType xType;
-    private ColumnType yType;
+    private DataColumnType xType;
+    private DataColumnType yType;
 
     private BufferedImage image;
 
@@ -31,7 +38,7 @@ public class SvmTest {
         s = new KernelSvm<RatterKernelParameter>(data, kernel);
         svmHandler = new SvmHandler<KernelSvm<RatterKernelParameter>, RatterKernelParameter, CostParameter>(data, s);
 
-        List<ColumnType> independentTypes = data.getIndependentTypes();
+        List<DataColumnType> independentTypes = data.getIndependentTypes();
         xType = independentTypes.get(0);
         yType = independentTypes.get(1);
 

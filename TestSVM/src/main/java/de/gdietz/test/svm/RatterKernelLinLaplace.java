@@ -1,24 +1,22 @@
 package de.gdietz.test.svm;
 
+import de.symate.detact.analysis.data.DataValue;
+
 /**
- * Created with IntelliJ IDEA.
  * User: Eduard
- * Date: 30.05.13
- * Time: 16:23
- * To change this template use File | Settings | File Templates.
  */
 public class RatterKernelLinLaplace  {
-    public double kernel(RatterKernelParameter p, Value[] values1, Value[] values2){
+    public double kernel(RatterKernelParameter p, DataValue[] values1, DataValue[] values2){
         int n = values1.length;
         double gamma1 = p.getGamma1();
         double gamma2 = p.getGamma2();
         double gamma = p.getGamma();
-        double d1 = values1[0].getValue();
-        double d2 = values2[0].getValue();
+        double d1 = values1[0].getDouble();
+        double d2 = values2[0].getDouble();
 //        double[] omega1 = new double[n-1];
 //        double[] omega2 = new double[n-1];
-        double omega1 = values1[1].getValue();
-        double omega2 = values2[1].getValue();
+        double omega1 = values1[1].getDouble();
+        double omega2 = values2[1].getDouble();
 //        for(int i = 0; i < n-1; i++) {
 //            omega1[i] = values1[i+1].getValue();
 //            omega2[i] = values2[i+1].getValue();

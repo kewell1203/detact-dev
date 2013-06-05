@@ -1,14 +1,9 @@
 package de.gdietz.test.svm;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created with IntelliJ IDEA.
  * User: Eduard
- * Date: 30.05.13
- * Time: 11:41
- * To change this template use File | Settings | File Templates.
  */
 public class RatterKernelFactory {
     private Class[] types = {};

@@ -1,5 +1,7 @@
 package de.gdietz.test.svm;
 
+import de.symate.detact.analysis.data.*;
+
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,25 +11,25 @@ import java.util.*;
 
 public class RatterData implements Data {
 
-    private List<Column> data;
-    private ColumnType resultType;
-    private List<ColumnType> independentTypes;
+    private List<DataColumn> data;
+    private DataColumnType resultType;
+    private List<DataColumnType> independentTypes;
 
     public RatterData(String name) {
-        resultType = new ColumnType("stable");
-        ColumnType dType = new ColumnType("d");
-        ColumnType omegaType = new ColumnType("omega");
+        resultType = new DataColumnTypeOfflineImpl("stable");
+        DataColumnType dType = new DataColumnTypeOfflineImpl("d");
+        DataColumnType omegaType = new DataColumnTypeOfflineImpl("omega");
 
-        independentTypes = new ArrayList<ColumnType>();
+        independentTypes = new ArrayList<DataColumnType>();
         independentTypes.add(dType);
         independentTypes.add(omegaType);
 //        independentTypes.add(omegaType);
 //        independentTypes.add(dType);
-        Column result = new Column(resultType);
-        Column d = new Column(dType);
-        Column omega = new Column(omegaType);
+        DataColumn result = new DataColumnImpl(resultType);
+        DataColumn d = new DataColumnImpl(dType);
+        DataColumn omega = new DataColumnImpl(omegaType);
 
-        data = new ArrayList<Column>();
+        data = new ArrayList<DataColumn>();
         data.add(result);
         data.add(d);
         data.add(omega);
@@ -74,16 +76,38 @@ public class RatterData implements Data {
         }
     }
 
-    public List<Column> getData() {
+    public List<DataColumn> getData() {
         return data;
     }
 
-    public ColumnType getResultType() {
+    public DataColumnType getResultType() {
         return resultType;
     }
 
-    public List<ColumnType> getIndependentTypes() {
+    public List<DataColumnType> getIndependentTypes() {
         return independentTypes;
+    }
+
+    @Override
+    public List<DataColumnType> getDependentTypes() {
+        List<DataColumnType> result = new ArrayList<DataColumnType>(1);
+        result.add(resultType);
+        return result;
+    }
+
+    @Override
+    public List<DataColumnType> getControllableTypes() {
+        return new ArrayList<DataColumnType>(0);
+    }
+
+    @Override
+    public List<DataColumnType> getConditionTypes() {
+        return new ArrayList<DataColumnType>(0);
+    }
+
+    @Override
+    public List<DataColumnType> getGroupingTypes() {
+        return new ArrayList<DataColumnType>(0);
     }
 
 }

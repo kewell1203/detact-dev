@@ -1,28 +1,25 @@
 package de.gdietz.test.svm;
 
-
-import org.encog.mathutil.libsvm.svm_model;
+import de.symate.detact.analysis.data.DataHandler;
+import de.symate.detact.analysis.data.DataValue;
+import libsvm.svm_model;
 
 /**
- * Created with IntelliJ IDEA.
  * User: Eduard
- * Date: 31.05.13
- * Time: 11:48
- * To change this template use File | Settings | File Templates.
  */
 public class RatterKernelLinGauss implements RatterKernel{
-    public double kernel(RatterKernelParameter p, Value[] values1, Value[] values2){
+    public double kernel(RatterKernelParameter p, DataValue[] values1, DataValue[] values2){
         int n = values1.length;
         double gamma1 = p.getGamma1();
         double gamma2 = p.getGamma2();
         double gamma = p.getGamma();
-        double d1 = values1[0].getValue();
-        double d2 = values2[0].getValue();
+        double d1 = values1[0].getDouble();
+        double d2 = values2[0].getDouble();
         double[] omega1 = new double[n-1];
         double[] omega2 = new double[n-1];
         for(int i = 0; i < n-1; i++) {
-            omega1[i] = values1[i+1].getValue();
-            omega2[i] = values2[i+1].getValue();
+            omega1[i] = values1[i+1].getDouble();
+            omega2[i] = values2[i+1].getDouble();
         }
         return calculateKernel(gamma1, gamma2, gamma, omega1, d1, omega2, d2);
     }

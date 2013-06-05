@@ -1,5 +1,7 @@
 package de.gdietz.test.svm;
 
+import de.symate.detact.analysis.svm.KernelParameter;
+
 public class RatterKernelParameter implements KernelParameter {
 
     private double gamma1;
