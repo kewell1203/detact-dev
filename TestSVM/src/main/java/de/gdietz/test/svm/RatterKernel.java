@@ -3,6 +3,7 @@ package de.gdietz.test.svm;
 import de.symate.detact.analysis.data.DataHandler;
 import de.symate.detact.analysis.data.DataValue;
 import de.symate.detact.analysis.svm.KernelFunction;
+import de.symate.detact.analysis.svm.ratter.RatterKernelParameter;
 import libsvm.svm_model;
 
 /**

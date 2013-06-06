@@ -6,6 +6,10 @@ import de.symate.detact.analysis.data.DataValue;
 import de.symate.detact.analysis.data.convert.DataScaled;
 import de.symate.detact.analysis.svm.CostParameter;
 import de.symate.detact.analysis.svm.KernelSvm;
+import de.symate.detact.analysis.svm.kernel.OneDimCauchyKernel;
+import de.symate.detact.analysis.svm.kernel.OneDimGaussKernel;
+import de.symate.detact.analysis.svm.ratter.RatterKernelFunction;
+import de.symate.detact.analysis.svm.ratter.RatterKernelParameter;
 import libsvm.svm;
 import libsvm.svm_model;
 import libsvm.svm_parameter;
@@ -123,4 +127,12 @@ public class SVMTest2 extends JPanel{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+
+    public void bla() {
+        RatterKernelFunction test = new RatterKernelFunction(RatterData.dType, RatterData.omegaType,
+                new OneDimDPartKernelFunction(new OneDimDPartTanhKernelFunction()),
+                new OneDimGaussKernel());
+
+    }
+
 }

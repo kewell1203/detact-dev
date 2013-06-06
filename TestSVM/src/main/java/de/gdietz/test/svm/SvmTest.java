@@ -6,6 +6,7 @@ import de.symate.detact.analysis.data.DataHandler;
 import de.symate.detact.analysis.data.convert.DataScaled;
 import de.symate.detact.analysis.svm.CostParameter;
 import de.symate.detact.analysis.svm.KernelSvm;
+import de.symate.detact.analysis.svm.ratter.RatterKernelParameter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

@@ -11,14 +11,16 @@ import java.util.*;
 
 public class RatterData implements Data {
 
+    public static final DataColumnType dType = new DataColumnTypeOfflineImpl("d");
+    public static final DataColumnType omegaType = new DataColumnTypeOfflineImpl("omega");
+
+
     private List<DataColumn> data;
     private DataColumnType resultType;
     private List<DataColumnType> independentTypes;
 
     public RatterData(String name) {
         resultType = new DataColumnTypeOfflineImpl("stable");
-        DataColumnType dType = new DataColumnTypeOfflineImpl("d");
-        DataColumnType omegaType = new DataColumnTypeOfflineImpl("omega");
 
         independentTypes = new ArrayList<DataColumnType>();
         independentTypes.add(dType);

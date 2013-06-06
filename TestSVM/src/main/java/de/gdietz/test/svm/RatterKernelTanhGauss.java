@@ -2,6 +2,7 @@ package de.gdietz.test.svm;
 
 import de.symate.detact.analysis.data.DataHandler;
 import de.symate.detact.analysis.data.DataValue;
+import de.symate.detact.analysis.svm.ratter.RatterKernelParameter;
 import libsvm.svm_model;
 
 /**
@@ -10,9 +11,9 @@ import libsvm.svm_model;
 public class RatterKernelTanhGauss implements RatterKernel {
     public double kernel(RatterKernelParameter p, DataValue[] values1, DataValue[] values2){
         int n = values1.length;
-        double gamma1 = p.getGamma1();
-        double gamma2 = p.getGamma2();
-        double gamma = p.getGamma();
+        double gamma1 = p.getkD().getGamma();
+        double gamma2 = p.getkD().getSigma();
+        double gamma = p.getkOmega().getGamma();
         double d1 = values1[0].getDouble();
         double d2 = values2[0].getDouble();
         double[] omega1 = new double[n-1];
@@ -33,9 +34,9 @@ public class RatterKernelTanhGauss implements RatterKernel {
     }
 
     public double getDecision(RatterKernelParameter p, svm_model model, DataHandler data, double[] x){
-        double gamma1 = p.getGamma1();
-        double gamma2 = p.getGamma2();
-        double gamma = p.getGamma();
+        double gamma1 = p.getkD().getGamma();
+        double gamma2 = p.getkD().getSigma();
+        double gamma = p.getkOmega().getGamma();
         double squareOmega = 0d;
         double el = 0d;
         double de = 0d;
