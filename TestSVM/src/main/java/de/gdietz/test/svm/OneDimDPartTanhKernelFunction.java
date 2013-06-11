@@ -20,7 +20,11 @@ public class OneDimDPartTanhKernelFunction implements OneParamInvertibleFunction
 
     @Override
     public double phiInverse(double sigma, double phi) {
-        return RatterKernelTanhGauss.atanh(phi) / sigma;
+        return atanh(phi) / sigma;
+    }
+
+    public static double atanh(double x){
+        return 0.5 * Math.log ((1 + x)/ (1 - x));
     }
 
 }

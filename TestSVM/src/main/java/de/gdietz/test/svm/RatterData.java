@@ -6,40 +6,41 @@ import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class RatterData implements Data {
 
-    public static final DataColumnType dType = new DataColumnTypeOfflineImpl("d");
-    public static final DataColumnType omegaType = new DataColumnTypeOfflineImpl("omega");
+    public static final DataColumnType stableType = new DataColumnTypeOfflineImpl("stable");
 
+    public static final DataColumnType omegaType = new DataColumnTypeOfflineImpl("omega");
+    public static final DataColumnType dType = new DataColumnTypeOfflineImpl("d");
 
     private List<DataColumn> data;
-    private DataColumnType resultType;
+
+    private List<DataColumnType> dependentTypes;
     private List<DataColumnType> independentTypes;
 
     public RatterData(String name) {
-        resultType = new DataColumnTypeOfflineImpl("stable");
-
-        independentTypes = new ArrayList<DataColumnType>();
+        dependentTypes = new ArrayList<DataColumnType>(1);
+        dependentTypes.add(stableType);
+        independentTypes = new ArrayList<DataColumnType>(2);
         independentTypes.add(dType);
         independentTypes.add(omegaType);
-//        independentTypes.add(omegaType);
-//        independentTypes.add(dType);
-        DataColumn result = new DataColumnImpl(resultType);
+
+        DataColumn stable = new DataColumnImpl(stableType);
         DataColumn d = new DataColumnImpl(dType);
         DataColumn omega = new DataColumnImpl(omegaType);
 
         data = new ArrayList<DataColumn>();
-        data.add(result);
+        data.add(stable);
         data.add(d);
         data.add(omega);
-//        data.add(omega);
-//        data.add(d);
+
         try {
             String fileName = name + ".csv";
-            InputStream is = ClassLoader.getSystemResourceAsStream(fileName);
+            InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
 
             if (is == null)
                 throw new FileNotFoundException("File not found in class path: " + fileName);
@@ -48,7 +49,8 @@ public class RatterData implements Data {
 
             String line = scanner.nextLine();
             String[] contents = line.split(",");
-            if (!contents[1].equals("\"Drehzahl\"") || !contents[2].equals("\"Stegbreite\"") ||
+            if (contents.length != 4 ||
+                    !contents[1].equals("\"Drehzahl\"") || !contents[2].equals("\"Stegbreite\"") ||
                     !contents[3].equals("\"Stabil\""))
                 throw new NoSuchParameterException("Wrong Header Line");
 
@@ -64,9 +66,9 @@ public class RatterData implements Data {
                     double dValue = Double.parseDouble(dString);
                     boolean stableValue = Boolean.parseBoolean(stableString);
 
-                    result.add(stableValue ? 1.0 : -1.0);
-                    omega.add(omegaValue);
+                    stable.add(stableValue ? 1.0 : -1.0);
                     d.add(dValue);
+                    omega.add(omegaValue);
                 } catch (NumberFormatException e) {
                     throw new NoSuchParameterException("Wrong content", e);
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -78,38 +80,36 @@ public class RatterData implements Data {
         }
     }
 
+    @Override
     public List<DataColumn> getData() {
         return data;
     }
 
-    public DataColumnType getResultType() {
-        return resultType;
+    @Override
+    public List<DataColumnType> getDependentTypes() {
+        return dependentTypes;
     }
 
+    @Override
     public List<DataColumnType> getIndependentTypes() {
         return independentTypes;
     }
 
     @Override
-    public List<DataColumnType> getDependentTypes() {
-        List<DataColumnType> result = new ArrayList<DataColumnType>(1);
-        result.add(resultType);
-        return result;
+    public List<DataColumnType> getControllableTypes() {
+        return independentTypes;
     }
 
-    @Override
-    public List<DataColumnType> getControllableTypes() {
-        return new ArrayList<DataColumnType>(0);
-    }
+    private final List<DataColumnType> EMPTY_TYPE_LIST = new ArrayList<DataColumnType>();
 
     @Override
     public List<DataColumnType> getConditionTypes() {
-        return new ArrayList<DataColumnType>(0);
+        return EMPTY_TYPE_LIST;
     }
 
     @Override
     public List<DataColumnType> getGroupingTypes() {
-        return new ArrayList<DataColumnType>(0);
+        return EMPTY_TYPE_LIST;
     }
 
 }

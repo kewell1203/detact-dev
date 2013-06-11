@@ -50,9 +50,23 @@ public class RatterKernelFunction implements KernelFunction<RatterKernelParamete
     }
 
     @Override
-    public double getDecision(RatterKernelParameter p, svm_model model, DataHandler data, double[] omegas) {
-        // TODO
-        return 0;
+    public double getDecision(RatterKernelParameter k, svm_model model, DataHandler data, double[] omega) {
+        SvmModelResult smr = new SvmModelResult(model, data);
+        double[] ds = smr.getDs();
+        double[][] omegas = smr.getOmegas();
+        double[] cs = smr.getCs();
+        double bias = smr.getBias();
+        double el = 0;
+        double de = 0;
+        double res = 0;
+
+        for (int i = 0; i < ds.length; i++) {
+            el += cs[i] * (omegaPart.kernel(k.getkOmega(), omega[0], omegas[i][0]));
+            de += cs[i] * dPart.getPhi().phi(k.getkD().getSigma(), ds[i]);
+        }
+
+        res = (bias - el ) / ( de * k.getkD().getGamma() );
+        return dPart.getPhi().phiInverse(k.getkD().getSigma(), res);
     }
 
 }

@@ -4,7 +4,6 @@ import de.symate.detact.analysis.data.DataHandler;
 import de.symate.detact.analysis.data.DataValue;
 import de.symate.detact.analysis.svm.ratter.RatterKernelParameter;
 import libsvm.svm_model;
-
 /**
  * User: Eduard
  */

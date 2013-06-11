@@ -6,6 +6,8 @@ import de.symate.detact.analysis.svm.KernelFunction;
 import de.symate.detact.analysis.svm.ratter.RatterKernelParameter;
 import libsvm.svm_model;
 
+
+
 /**
  * User: Eduard
  */

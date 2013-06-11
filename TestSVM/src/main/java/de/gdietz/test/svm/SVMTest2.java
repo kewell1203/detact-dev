@@ -6,9 +6,7 @@ import de.symate.detact.analysis.data.DataValue;
 import de.symate.detact.analysis.data.convert.DataScaled;
 import de.symate.detact.analysis.svm.CostParameter;
 import de.symate.detact.analysis.svm.KernelSvm;
-import de.symate.detact.analysis.svm.kernel.OneDimCauchyKernel;
 import de.symate.detact.analysis.svm.kernel.OneDimGaussKernel;
-import de.symate.detact.analysis.svm.ratter.RatterKernelFunction;
 import de.symate.detact.analysis.svm.ratter.RatterKernelParameter;
 import libsvm.svm;
 import libsvm.svm_model;
@@ -19,6 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+
 /**
  * User: Eduard
  */
@@ -28,21 +27,19 @@ public class SVMTest2 extends JPanel{
     private static final Color COLOR_BACK0 = new Color(250, 250, 210);
     private static final Color COLOR_BACK1 = new Color(224, 255, 255);
     private BufferedImage image;
-    private DataHandler data;
-//    private RatterKernelFunction kernel;
-    private RatterKernel kernel;
+    private RatterKernelFunction kernel;
     private KernelSvm<RatterKernelParameter> s;
-    private SvmHandler<KernelSvm<RatterKernelParameter>, RatterKernelParameter, CostParameter> svmHandler;
 
     public SVMTest2(DataHandler data){
-        this.data = data;
-        kernel = RatterKernelFactory.getKernel(RatterKernelTanhGauss.class);
+        kernel = new RatterKernelFunction(RatterData.dType, RatterData.omegaType,
+                new OneDimDPartKernelFunction(new OneDimDPartTanhKernelFunction()),
+                new OneDimGaussKernel());
         s = new KernelSvm<RatterKernelParameter>(data, kernel);
     }
 
 
     public void drawSVM(int width, int height, svm_model model, DataHandler data, DataColumnType xType, DataColumnType yType,
-                                RatterKernelParameter k, CostParameter p) {
+                                RatterKernelParameter k) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         double[] xMinMax = data.minMax(xType);
         double[] yMinMax = data.minMax(yType);
@@ -105,34 +102,20 @@ public class SVMTest2 extends JPanel{
         g.drawImage(image, 0, 0, null);
     }
 
-
     public static void main(String[] args) {
-
         DataHandler data = new DataHandler(new DataScaled(new RatterData("ratterx30")));
         SVMTest2 svm2 = new SVMTest2(data);
         RatterKernelParameter k = new RatterKernelParameter(10.0, .25, 10);
-
         CostParameter p = new CostParameter(10);
-
         svm_parameter param = svm2.s.createParameter(k, p);
         svm_problem prob = svm2.s.createProblem(k);
         svm_model model = svm.svm_train(prob, param);
-        SvmModelResult smr = new SvmModelResult(model,data);
-        double r = svm2.kernel.getDecision(k,model, data,new double[] {0.4});
-        svm2.drawSVM(600, 480, model, data, new DataColumnTypeOfflineImpl("omega"), new DataColumnTypeOfflineImpl("d"), k, p);
+        svm2.drawSVM(600, 480, model, data, new DataColumnTypeOfflineImpl("omega"), new DataColumnTypeOfflineImpl("d"), k);
         JFrame frame = new JFrame("SVMTest2");
         frame.add(svm2);
         svm2.setPreferredSize(new Dimension(600, 480));
         frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
-
-    public void bla() {
-        RatterKernelFunction test = new RatterKernelFunction(RatterData.dType, RatterData.omegaType,
-                new OneDimDPartKernelFunction(new OneDimDPartTanhKernelFunction()),
-                new OneDimGaussKernel());
-
-    }
-
 }

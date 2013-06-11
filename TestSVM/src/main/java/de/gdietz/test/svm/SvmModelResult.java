@@ -14,8 +14,6 @@ public class SvmModelResult {
     double[] cs;
     double bias;
     double[][] svs;
-    double[] ds;
-    double[][] omegas;
 
     public SvmModelResult(svm_model model, DataHandler data) {
         this.model = model;
@@ -23,8 +21,6 @@ public class SvmModelResult {
         bias = model.rho[0];
         cs = model.sv_coef[0];
         svs = getSVs();
-        ds = getDs();
-        omegas = getOmegas();
     }
 
     public double[] getCs() {
@@ -36,7 +32,11 @@ public class SvmModelResult {
     }
 
     public int[] getSVindices() {
-        return model.sv_indices;
+        int[] sv_indices = new int[model.l];
+        for (int i = 0; i < sv_indices.length; i++){
+            sv_indices[i] = (int) model.SV[i][0].value;
+        }
+    return sv_indices;
     }
 
     public double[][] getSVs() {
@@ -54,7 +54,7 @@ public class SvmModelResult {
     }
 
     public double[] getDs() {
-        ds = new double[svs.length];
+        double[] ds = new double[svs.length];
         for(int i = 0; i < svs.length; i++){
             ds[i] = svs[i][0];
         }
@@ -64,7 +64,7 @@ public class SvmModelResult {
     public double[][] getOmegas() {
         int m = svs.length;
         int n = svs[0].length-1;
-        omegas = new double[m][n];
+        double[][] omegas = new double[m][n];
         for(int i = 0; i < m; i++){
             for(int j = 0; j < n; j++){
                 omegas[i][j] = svs[i][j+1];
