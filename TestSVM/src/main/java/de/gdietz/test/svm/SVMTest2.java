@@ -105,7 +105,7 @@ public class SVMTest2 extends JPanel{
     public static void main(String[] args) {
         DataHandler data = new DataHandler(new DataScaled(new RatterData("ratterx30")));
         SVMTest2 svm2 = new SVMTest2(data);
-        RatterKernelParameter k = new RatterKernelParameter(10.0, .25, 10);
+        RatterKernelParameter k = new RatterKernelParameter(10.0, .25, 100);
         CostParameter p = new CostParameter(10);
         svm_parameter param = svm2.s.createParameter(k, p);
         svm_problem prob = svm2.s.createProblem(k);
