@@ -1,6 +1,7 @@
 package de.symate.test.svm.regression;
 import de.symate.detact.analysis.data.DataHandler;
 import de.symate.detact.analysis.data.convert.DataComplete;
+import org.apache.log4j.Logger;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -16,6 +17,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class RegressionTest {
+
+    private static Logger log = Logger.getLogger(RegressionTest.class);
+
     public  static String getFunction(DataHandler data) {
         CostEpsGamma ceg = new CostEpsGamma(10, .001, 100);
         SVMRegJSGenerator jrg = new SVMRegJSGenerator(data, ceg);
@@ -65,8 +69,10 @@ public class RegressionTest {
         ScriptEngine jsEngine = mgr.getEngineByName("JavaScript");
         try {
             String eval = "var f = " + getFunction(data) + "; f([" + mahlgrad + ", " + mehlmenge + ", " + nasspressen + ", " + wassermenge + "]);";
+            log.debug("eval: " + eval);
             result = jsEngine.eval(eval);
         } catch (ScriptException e) {
+            log.error("Script konnte nicht ausgeführt werden", e);
             throw new AssertionError(e);
         }
         return result;
